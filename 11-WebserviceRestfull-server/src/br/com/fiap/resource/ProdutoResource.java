@@ -3,8 +3,10 @@ package br.com.fiap.resource;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -51,10 +53,27 @@ public class ProdutoResource {
 	}
 	
 	//Atualizar
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response atualizar(@PathParam("id") int codigo, ProdutoTO produto){
+		bo.atualizar(produto);
+		return Response.ok().build();
+	}
 	
 	//Remover
+	@DELETE
+	@Path("/{id}")
+	public void remover(@PathParam("id") int id){
+		bo.remover(id);
+	}
 	
 }
+
+
+
+
+
 
 
 

@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -21,7 +22,6 @@ import br.com.fiap.dao.PerfumeDAO;
 import br.com.fiap.dao.impl.PerfumeDAOImpl;
 import br.com.fiap.entity.Perfume;
 import br.com.fiap.exception.DBException;
-import br.com.fiap.exception.IdNotFoundException;
 import br.com.fiap.factory.EntityManagerFactorySingleton;
 
 @Path("/perfume")
@@ -44,11 +44,23 @@ public class PerfumeResource {
 			em.close();
 		}
 	}
-	/*
+	
 	// /rest/perfume/{codigo} PUT
-	public Response atualizar(int codigo, Perfume perfume){
-		
-	}*/
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response atualizar(@PathParam("id") int codigo, Perfume perfume){
+		EntityManager em = fabrica.createEntityManager();
+		PerfumeDAO dao = new PerfumeDAOImpl(em);
+		perfume.setCodigo(codigo);
+		dao.alterar(perfume);
+		try {
+			dao.salvar();
+		} catch (DBException e) {
+			e.printStackTrace();
+		}
+		return Response.ok().build(); // HTTP Status 200 ok
+	}
 	
 	// /rest/perfume/{codigo} GET
 	@GET
